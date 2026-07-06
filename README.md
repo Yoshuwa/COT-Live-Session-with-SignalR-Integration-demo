@@ -1,5 +1,11 @@
 # COT Live Session with SignalR Integration demo
 
+## Demo
+
+[Watch the demo video on YouTube](https://youtu.be/orsde6ERNIc)
+
+![Live sessions dashboard and test users](docs/images/live-session-demo.png)
+
 ## Implemented features
 
 - ASP.NET Forms Authentication backed by SQL Server membership and roles.
