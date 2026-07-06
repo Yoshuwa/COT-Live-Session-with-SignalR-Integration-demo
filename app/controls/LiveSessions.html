@@ -1,0 +1,217 @@
+<!doctype html>
+<html>
+<body>
+  <style>
+    .live-sessions {
+      margin: 24px 28px 34px;
+      color: #111827;
+    }
+
+    .live-sessions .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 22px;
+    }
+
+    .live-sessions h2 {
+      margin: 0;
+      font-size: 32px;
+      line-height: 1.2;
+      font-weight: 600;
+    }
+
+    .live-sessions .count {
+      margin-top: 10px;
+      color: #5f6368;
+      font-size: 18px;
+    }
+
+    .live-sessions .toolbar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .live-sessions button {
+      border: 1px solid #c8d1dc;
+      background: #fff;
+      color: #1f2937;
+      border-radius: 6px;
+      padding: 8px 12px;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .live-sessions button.danger {
+      background: #b3261e;
+      border-color: #b3261e;
+      color: #fff;
+    }
+
+    .live-sessions .message {
+      margin: 16px 0;
+      color: #0b57d0;
+    }
+
+    .live-sessions table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border: 1px solid #d9e0e8;
+    }
+
+    .live-sessions th,
+    .live-sessions td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #e6ebf1;
+      text-align: left;
+      vertical-align: top;
+      font-size: 14px;
+    }
+
+    .live-sessions th {
+      background: #eef2f7;
+      font-weight: 600;
+    }
+
+    .live-sessions .muted {
+      color: #687281;
+      max-width: 420px;
+      word-break: break-word;
+    }
+
+    @media (max-width: 760px) {
+      .live-sessions {
+        margin: 18px 14px 28px;
+      }
+
+      .live-sessions .header {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .live-sessions .table-wrap {
+        overflow-x: auto;
+      }
+    }
+  </style>
+
+  <section class="live-sessions" id="liveSessionsApp">
+    <div class="header">
+      <div>
+        <h2>Live Sessions</h2>
+        <div class="count" data-live-count>Loading live sessions...</div>
+      </div>
+      <div class="toolbar">
+        <button type="button" data-refresh>Refresh</button>
+        <button type="button" class="danger" data-force-all>Force Logout All</button>
+      </div>
+    </div>
+    <div data-live-message></div>
+    <div class="table-wrap" data-live-table></div>
+  </section>
+
+  <script>
+    (function () {
+      var root = document.getElementById('liveSessionsApp');
+      if (!root || root.getAttribute('data-ready') === 'true')
+        return;
+      root.setAttribute('data-ready', 'true');
+
+      var countNode = root.querySelector('[data-live-count]');
+      var messageNode = root.querySelector('[data-live-message]');
+      var tableNode = root.querySelector('[data-live-table]');
+
+      function request(method, body) {
+        var options = { method: method, credentials: 'same-origin' };
+        if (body) {
+          options.headers = { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' };
+          options.body = body;
+        }
+        return fetch('../LiveSessions.ashx?partial=true', options).then(function (response) {
+          if (response.status === 401 || response.status === 403) {
+            window.location.reload();
+            return null;
+          }
+          return response.json();
+        });
+      }
+
+      function render(data) {
+        if (!data)
+          return;
+        countNode.textContent = data.countText;
+        messageNode.innerHTML = data.message ? '<div class="message">' + data.message + '</div>' : '';
+        tableNode.innerHTML = data.tableHtml;
+      }
+
+      function refresh() {
+        request('GET').then(render);
+      }
+
+      root.addEventListener('click', function (event) {
+        var userButton = event.target.closest('[data-force-user]');
+        if (userButton) {
+          if (confirm('Force logout this user from all tracked live sessions?'))
+            request('POST', 'action=force-user&user=' + encodeURIComponent(userButton.getAttribute('data-force-user'))).then(render);
+          return;
+        }
+        if (event.target.closest('[data-force-all]')) {
+          if (confirm('Force logout all live sessions?'))
+            request('POST', 'action=force-all').then(render);
+          return;
+        }
+        if (event.target.closest('[data-refresh]'))
+          refresh();
+      });
+
+      refresh();
+
+      document.addEventListener('liveSessionsChanged', refresh);
+
+      (function () {
+        var appRoot = '../';
+        function load(src, done) {
+          var script = document.createElement('script');
+          var called = false;
+          function complete() {
+            if (!called) {
+              called = true;
+              if (done)
+                done();
+            }
+          }
+          script.src = appRoot + src;
+          script.onload = complete;
+          script.onreadystatechange = function () {
+            if (/loaded|complete/.test(script.readyState || ''))
+              complete();
+          };
+          document.body.appendChild(script);
+        }
+        function connect() {
+          var jq = window.jQuery;
+          if (!jq)
+            return;
+          load('js/sys/jquery.signalR-2.4.3.min.js', function () {
+            load('signalr/hubs', function () {
+              if (jq.noConflict)
+                jq.noConflict(true);
+              if (jq.connection && jq.connection.liveSessionsHub) {
+                jq.connection.liveSessionsHub.client.liveSessionsChanged = refresh;
+                if (jq.connection.hub.state === jq.signalR.connectionState.disconnected)
+                  jq.connection.hub.start();
+              }
+            });
+          });
+        }
+        window.setTimeout(function () {
+          load('js/sys/jquery-2.2.4.min.js', connect);
+        }, 1500);
+      })();
+    })();
+  </script>
+</body>
+</html>

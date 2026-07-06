@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<siteMap xmlns="http://schemas.microsoft.com/AspNet/SiteMap-File-1.0">
+  <siteMapNode title="^SiteHome^Home^SiteHome^" description="" url="~/index.html">
+    <siteMapNode title="^HomePath^Home^HomePath^" description="^HomeDesc^Application home page^HomeDesc^" url="~/pages/home" cssClass="Wide" />
+    <siteMapNode title="Admin" description="Administration tools" roles="Administrators">
+      <siteMapNode title="Live Sessions" description="View live users and force logout sessions" url="~/pages/live-sessions" roles="Administrators" />
+    </siteMapNode>
+  </siteMapNode>
+</siteMap>

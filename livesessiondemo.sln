@@ -1,0 +1,48 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36811.4 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "app", "app\", "{B79666CB-B6AA-44F6-8D6F-8DA4D2BB0C1E}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.6"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_56088"
+		Debug.AspNetCompiler.PhysicalPath = "app\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_56088\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_56088"
+		Release.AspNetCompiler.PhysicalPath = "app\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_56088\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "56088"
+		SlnRelativePath = "app\"
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Code On Time Items", "Code On Time Items", "{8B8D7D05-FD83-4F44-B914-73C3C7B38490}"
+	ProjectSection(SolutionItems) = preProject
+		ClientLibrary.en-GB.txt = ClientLibrary.en-GB.txt
+		DataAquarium.Project.xml = DataAquarium.Project.xml
+		DataAquarium.Version.xml = DataAquarium.Version.xml
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B79666CB-B6AA-44F6-8D6F-8DA4D2BB0C1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B79666CB-B6AA-44F6-8D6F-8DA4D2BB0C1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C5325F5C-322C-4E60-9592-E6596FC11146}
+	EndGlobalSection
+EndGlobal
